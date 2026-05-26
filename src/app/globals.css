@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+/* Class-based dark mode (toggled on <html>) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* ---- Brand: orange only, plus neutrals ---- */
+  --color-flame: #ea5b29; /* exact brand orange, traced from the logo */
+  --color-flame-bright: #ff7a47;
+  --color-flame-deep: #c7491d;
+
+  --color-ink: #0a0a0b; /* near-black */
+  --color-coal: #131316;
+  --color-graphite: #1d1d21;
+  --color-ash: #2a2a30;
+  --color-smoke: #8a8a93;
+  --color-mist: #b9b9c0;
+  --color-paper: #faf9f7; /* warm off-white */
+  --color-bone: #f1efea;
+
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+
+  --radius-hex: 14px;
+}
+
+/* ---- Semantic theme variables (swap per mode) ---- */
+:root {
+  --bg: var(--color-paper);
+  --bg-elev: #ffffff;
+  --bg-sunk: var(--color-bone);
+  --border: #e4e1da;
+  --border-strong: #d4d0c6;
+  --fg: var(--color-ink);
+  --fg-muted: #5b5b62;
+  --fg-faint: #8e8e96;
+  --grid-line: rgba(10, 10, 11, 0.05);
+  --hex-stroke: rgba(10, 10, 11, 0.06);
+  --glow: rgba(234, 91, 41, 0.14);
+}
+
+.dark {
+  --bg: var(--color-ink);
+  --bg-elev: var(--color-coal);
+  --bg-sunk: #060607;
+  --border: #26262c;
+  --border-strong: #34343c;
+  --fg: var(--color-paper);
+  --fg-muted: #9c9ca6;
+  --fg-faint: #6c6c76;
+  --grid-line: rgba(255, 255, 255, 0.04);
+  --hex-stroke: rgba(255, 255, 255, 0.045);
+  --glow: rgba(234, 91, 41, 0.22);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  ::selection {
+    background: var(--color-flame);
+    color: #fff;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 0.98;
+  }
+  /* Respect reduced motion globally */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--color-flame);
+  }
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+
+  /* fluid display sizing — no overflow on any screen */
+  .display-xl { font-size: clamp(2.6rem, 9vw, 7.5rem); }
+  .display-lg { font-size: clamp(2.1rem, 6.5vw, 4.75rem); }
+  .display-md { font-size: clamp(1.7rem, 4.5vw, 3rem); }
+
+  /* honeycomb background grid */
+  .honeycomb {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 0L56 16v32L28 64 0 48V16z' fill='none' stroke='%23808080' stroke-opacity='0.14' stroke-width='1'/%3E%3Cpath d='M28 64l28 16v32L28 128 0 112V80z' fill='none' stroke='%23808080' stroke-opacity='0.14' stroke-width='1'/%3E%3C/svg%3E");
+    background-size: 56px 96px;
+  }
+
+  .hex-clip {
+    clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  }
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+
+  .flame-text {
+    background: linear-gradient(100deg, var(--color-flame), var(--color-flame-bright));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .ring-flame {
+    box-shadow: 0 0 0 1px var(--color-flame), 0 0 40px -8px var(--glow);
+  }
+
+  .underline-grow {
+    background-image: linear-gradient(var(--color-flame), var(--color-flame));
+    background-size: 0% 1.5px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .underline-grow:hover { background-size: 100% 1.5px; }
+}
+
+/* Marquee for the tech swarm */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee { animation: marquee 38s linear infinite; }
+
+/* Slow float for decorative hexes */
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-floaty { animation: floaty 7s ease-in-out infinite; }
