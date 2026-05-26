@@ -54,7 +54,7 @@ export default function HornetModel({
     // Normalize to a consistent on-screen size.
     const size = new THREE.Vector3();
     bb.getSize(size);
-    const target = 4.6;
+    const target = 6.2;
     const scale = target / Math.max(size.x, size.y);
     geo.scale(scale, scale, scale);
     geo.computeVertexNormals();
